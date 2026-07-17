@@ -6,9 +6,10 @@ let state = {
   cards: saved.cards || {}, current: null, answered: false, lastId: null
 };
 
-const mode = $("modeSelect"), airport = $("airportSelect"), weakOnly = $("weakOnly");
+const mode = $("modeSelect"), airport = $("airportSelect"), airlineFilter = $("airlineFilter"), weakOnly = $("weakOnly");
 mode.value = saved.mode || "icao-callsign";
 airport.value = saved.airport || "ALL";
+airlineFilter.value = saved.airlineFilter || "";
 weakOnly.checked = saved.weakOnly || false;
 
 function normalize(s) { return s.trim().toUpperCase().replace(/[^A-Z0-9]/g, ""); }
@@ -16,6 +17,8 @@ function idOf(a) { return a.icao; }
 function cardStats(a) { return state.cards[idOf(a)] || {right:0, wrong:0}; }
 function pool() {
   let p = AIRLINES.filter(a => airport.value === "ALL" || a.airports.includes(airport.value));
+  const query = airlineFilter.value.trim().toLocaleLowerCase("cs-CZ");
+  if (query) p = p.filter(a => [a.airline, a.icao, a.callsign].some(value => value.toLocaleLowerCase("cs-CZ").includes(query)));
   if (weakOnly.checked) p = p.filter(a => cardStats(a).wrong > cardStats(a).right);
   return p;
 }
@@ -33,7 +36,7 @@ function renderQuestion() {
   $("feedback").classList.add("hidden"); $("answerForm").classList.remove("hidden");
   if (!state.current) {
     $("prompt").textContent = "Žádné otázky";
-    $("hint").textContent = "Nejdřív si pár aerolinek procvič bez filtru problematických.";
+    $("hint").textContent = "Uprav filtr aerolinek, letiště nebo vypni výběr problematických.";
     $("answerFields").innerHTML = ""; return;
   }
   const a = state.current, m = mode.value;
@@ -68,13 +71,14 @@ function updateStats() {
   $("accuracyStat").textContent = total ? `${Math.round(state.correct/total*100)} %` : "–";
 }
 function save() {
-  localStorage.setItem(STORAGE, JSON.stringify({correct:state.correct,wrong:state.wrong,streak:state.streak,cards:state.cards,mode:mode.value,airport:airport.value,weakOnly:weakOnly.checked}));
+  localStorage.setItem(STORAGE, JSON.stringify({correct:state.correct,wrong:state.wrong,streak:state.streak,cards:state.cards,mode:mode.value,airport:airport.value,airlineFilter:airlineFilter.value,weakOnly:weakOnly.checked}));
 }
 
 $("answerForm").addEventListener("submit", e => { e.preventDefault(); check(); });
 $("dontKnowBtn").addEventListener("click", () => check(true));
 $("nextBtn").addEventListener("click", renderQuestion);
 [mode,airport,weakOnly].forEach(el => el.addEventListener("change", () => { save(); renderQuestion(); }));
+airlineFilter.addEventListener("input", () => { save(); renderQuestion(); });
 $("settingsBtn").addEventListener("click", () => $("setup").classList.toggle("collapsed"));
 $("resetBtn").addEventListener("click", () => { if(confirm("Opravdu vynulovat všechny statistiky?")){ state.correct=state.wrong=state.streak=0; state.cards={}; save(); updateStats(); renderQuestion(); }});
 document.addEventListener("keydown", e => { if (e.key === "Enter" && state.answered) { e.preventDefault(); renderQuestion(); } });
