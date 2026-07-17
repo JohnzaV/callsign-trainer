@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071722">
+  <title>Callsign Trainer CZ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">ATC STUDY TOOL</p>
+        <h1>Callsign Trainer <span>CZ</span></h1>
+      </div>
+      <button id="settingsBtn" class="icon-btn" aria-label="Nastavení">⚙</button>
+    </header>
+
+    <section class="stats" aria-label="Statistiky">
+      <div><strong id="correctStat">0</strong><span>správně</span></div>
+      <div><strong id="streakStat">0</strong><span>série</span></div>
+      <div><strong id="accuracyStat">–</strong><span>úspěšnost</span></div>
+    </section>
+
+    <section id="setup" class="panel setup">
+      <label>Směr procvičování
+        <select id="modeSelect">
+          <option value="icao-callsign">ICAO → volací znak</option>
+          <option value="callsign-icao">Volací znak → ICAO</option>
+          <option value="airline-both">Aerolinka → ICAO + volací znak</option>
+        </select>
+      </label>
+      <label>Letiště
+        <select id="airportSelect">
+          <option value="ALL">Všechna česká letiště</option>
+          <option value="LKPR">LKPR · Praha/Ruzyně</option>
+          <option value="LKTB">LKTB · Brno/Tuřany</option>
+          <option value="LKMT">LKMT · Ostrava/Mošnov</option>
+          <option value="LKKV">LKKV · Karlovy Vary</option>
+        </select>
+      </label>
+      <label class="toggle"><input id="weakOnly" type="checkbox"><span></span> Jen problematické</label>
+    </section>
+
+    <section class="card panel" aria-live="polite">
+      <div class="card-top">
+        <span id="questionLabel">ICAO KÓD</span>
+        <span id="airportBadges" class="badges"></span>
+      </div>
+      <div id="prompt" class="prompt">BAW</div>
+      <p id="hint" class="hint">Zadej radiotelefonní volací znak</p>
+
+      <form id="answerForm">
+        <div id="answerFields"></div>
+        <div class="actions">
+          <button id="dontKnowBtn" type="button" class="secondary">Nevím</button>
+          <button id="checkBtn" type="submit" class="primary">Zkontrolovat</button>
+        </div>
+      </form>
+
+      <div id="feedback" class="feedback hidden">
+        <p id="feedbackTitle"></p>
+        <div id="answerReveal"></div>
+        <button id="nextBtn" class="primary full">Další <span>Enter ↵</span></button>
+      </div>
+    </section>
+
+    <footer><span id="poolCount"></span><button id="resetBtn">Vynulovat pokrok</button></footer>
+  </main>
+  <script src="airlines.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
