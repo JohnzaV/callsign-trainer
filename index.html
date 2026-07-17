@@ -40,10 +40,27 @@
           <option value="LKKV">LKKV · Karlovy Vary</option>
         </select>
       </label>
+      <label>Skupina aerolinek
+        <select id="airlineGroup">
+          <option value="ALL">Všechny aerolinky</option>
+          <option value="COMMON">Nejběžnější v ČR</option>
+          <option value="EUROPE">Evropa</option>
+          <option value="NORTH_AMERICA">Severní Amerika</option>
+          <option value="MIDDLE_EAST">Blízký východ</option>
+          <option value="ASIA">Asie</option>
+          <option value="AFRICA">Afrika</option>
+          <option value="CHARTER">Charterové / leisure</option>
+          <option value="CUSTOM">Vlastní výběr</option>
+        </select>
+      </label>
       <label class="airline-filter">Filtrovat aerolinky
         <input id="airlineFilter" type="search" autocomplete="off" placeholder="Název, ICAO nebo volací znak" aria-describedby="airlineFilterHelp">
         <span id="airlineFilterHelp" class="field-help">Nech prázdné pro všechny aerolinky.</span>
       </label>
+      <section id="customAirlines" class="custom-airlines hidden" aria-label="Vlastní výběr aerolinek">
+        <div class="custom-airlines-header"><strong>Vyber aerolinky</strong><div><button id="selectAllAirlines" type="button">Vybrat vše</button><button id="clearAirlines" type="button">Zrušit výběr</button></div></div>
+        <div id="customAirlineList" class="custom-airline-list"></div>
+      </section>
       <label class="toggle"><input id="weakOnly" type="checkbox"><span></span> Jen problematické</label>
     </section>
 
